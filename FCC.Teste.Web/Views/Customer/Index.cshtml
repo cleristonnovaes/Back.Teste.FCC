@@ -1,0 +1,265 @@
+﻿@model CreateCustomerDto
+
+@{
+    ViewData["Title"] = "Cadastrar Cliente";
+}
+
+<h2 class="form-title">Formulário de Cadastro</h2>
+<div class="form-container">
+    <div class="d-flex justify-content-end">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Voltar</a>
+    </div>
+    @using (Html.BeginForm("Create", "Customer", FormMethod.Post))
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, "Nome Completo")
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Cpf, "CPF")
+            @Html.TextBoxFor(model => model.Cpf, new { @class = "form-control", @id = "cpf", maxlength = "14" })
+            @Html.ValidationMessageFor(model => model.Cpf, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.BirthDate, "Data de Nascimento")
+            @Html.TextBoxFor(model => model.BirthDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            @Html.ValidationMessageFor(model => model.BirthDate, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.RG, "RG")
+            @Html.TextBoxFor(model => model.RG, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.RG, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.DispatchOrgan, "Orgão de Expedição")
+            @Html.TextBoxFor(model => model.DispatchOrgan, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.DispatchOrgan, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.DispatchState, "Estado")
+            <select asp-for="DispatchState" class="form-control">
+                <option value="">Selecione</option>
+                <option value="SP">São Paulo</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="MG">Minas Gerais</option>
+            </select>
+            @Html.ValidationMessageFor(model => model.DispatchState, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.DispatchDate, "Data de expedição")
+            @Html.TextBoxFor(model => model.DispatchDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            @Html.ValidationMessageFor(model => model.DispatchDate, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Gender, "Sexo")
+            <select asp-for="Gender" class="form-control">
+                <option value="">Selecione</option>
+                <option value="M">Masculino</option>
+                <option value="F">Feminino</option>
+            </select>
+            @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.MaritalStatus, "Estado Civil")
+            <select asp-for="MaritalStatus" class="form-control">
+                <option value="">Selecione</option>
+                <option value="Casado">Casado</option>
+                <option value="Solteiro">Solteiro</option>
+            </select>
+            @Html.ValidationMessageFor(model => model.MaritalStatus, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ZipCode, "CEP")
+            @Html.TextBoxFor(model => model.ZipCode, new { @class = "form-control", @id = "cep", maxlength = "9" })
+            @Html.ValidationMessageFor(model => model.ZipCode, "", new { @class = "text-danger" })
+            <button type="button" class="btn-small" onclick="serchAddress()">Buscar Endereço</button>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Street, "Logradouro")
+            @Html.TextBoxFor(model => model.Street, new { @class = "form-control", @id = "logradouro", })
+            @Html.ValidationMessageFor(model => model.Street, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.StreetNumber, "Número")
+            @Html.TextBoxFor(model => model.StreetNumber, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.StreetNumber, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Complement, "Complemento")
+            @Html.TextBoxFor(model => model.Complement, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Complement, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Neighborhood, "Bairro")
+            @Html.TextBoxFor(model => model.Neighborhood, new { @class = "form-control", @id = "bairro" })
+            @Html.ValidationMessageFor(model => model.Neighborhood, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.City, "Cidade")
+            @Html.TextBoxFor(model => model.City, new { @class = "form-control", @id = "cidade" })
+            @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.State, "UF")
+            @Html.TextBoxFor(model => model.State, new { @class = "form-control", @id = "uf" })
+            @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+        </div>
+
+        <button type="submit" class="btn-submit">Salvar</button>
+    }
+</div>
+
+<script>
+    document.getElementById('cpf').addEventListener('input', function (e) {
+        var value = e.target.value;
+        value = value.replace(/\D/g, '');
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d)/, '$1-$2');
+        e.target.value = value;
+    });
+
+    document.getElementById('cep').addEventListener('input', function (e) {
+        var value = e.target.value;
+        value = value.replace(/\D/g, ''); // Remove tudo que não é dígito
+        value = value.replace(/(\d{5})(\d)/, '$1-$2'); // Adiciona o hífen
+        e.target.value = value;
+    });
+    function serchAddress() {
+        var cep = document.getElementById("cep").value;
+        if (cep === "") {
+            alert("Por favor, insira um CEP.");
+            return;
+        }
+        if (cep.length < 9) {
+            alert("O CEP deve conter 8 dígitos.");
+            return;
+        }
+
+        $.ajax({
+            url: '@Url.Action("FillAutoAddress", "Customer")',
+            type: 'POST',
+            data: { zipcode: cep },
+            success: function (result) {
+                if (result.sucesso) {
+                    document.getElementById("logradouro").value = result.endereco.logradouro;
+                    document.getElementById("bairro").value = result.endereco.bairro;
+                    document.getElementById("cidade").value = result.endereco.localidade;
+                    document.getElementById("uf").value = result.endereco.uf;
+                } else {
+                    alert("Endereço não encontrado para o CEP informado.");
+                }
+            },
+            error: function () {
+                alert("Erro ao buscar o endereço. Verifique o CEP e tente novamente.");
+            }
+        });
+    }
+</script>
+
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-title {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .cep-group {
+        display: flex;
+        align-items: center;
+    }
+
+        .cep-group .form-control {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+    .btn-small {
+        padding: 8px 15px;
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+        margin-top: 0;
+    }
+
+        .btn-small:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-submit {
+        width: 100%;
+        padding: 12px;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 18px;
+        margin-top: 20px;
+    }
+
+        .btn-submit:hover {
+            background-color: #218838;
+        }
+
+    media (max-width: 768px) {
+        .form-container
+
+    {
+        padding: 15px;
+    }
+
+    .btn-submit {
+        width: 100%;
+    }
+
+    .cep-group {
+        flex-direction: column;
+    }
+
+        .cep-group .btn-small {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+    }
+</style>
+
+
+

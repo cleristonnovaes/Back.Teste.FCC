@@ -1,0 +1,53 @@
+﻿@model CustomerResponseList
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@if (ViewContext.HttpContext.Session.GetString("JwtToken") == null)
+{
+    <h1>Bem vindo a página de cadastro de clientes</h1>
+}
+else
+{
+    <div class="text-center">
+        <h1 class="display-4">Lista de Clientes</h1>
+    </div>
+    @if (Model == null)
+    {
+        <p>Carregando...</p>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>CPF</th>
+                    <th>Nome</th>
+                    <th>Editar</th>
+                    <th>Remover</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var customer in Model.Users.Data)
+                {
+                    <tr>
+                        <td>@customer.Name</td>
+                        <td>@customer.Cpf</td>
+                        <td>
+                            <a asp-controller="Customer" asp-action="GetById" asp-route-id="@customer.Id" class="btn btn-primary">Editar</a>
+                        </td>
+                        <td>
+                            @using (Html.BeginForm("Delete", "Customer", FormMethod.Post, new { id = customer.Id, action = Url.RouteUrl("DeleteCustomerRoute") }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("_method", "DELETE")
+                                <a asp-controller="Customer" asp-action="Delete" asp-route-id="@customer.Id" class="btn btn-primary">Remover</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
